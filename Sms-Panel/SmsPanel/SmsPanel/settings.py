@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     'authApp',
 ]
-AUTH_USER_MODEL = 'authApp.CustomUser'
+
+# AUTH_USER_MODEL = 'authApp.signup'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -76,21 +78,49 @@ WSGI_APPLICATION = 'SmsPanel.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
+        ###    For Postgres Localhost Connections  ####
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'smspanel',
+    #     'USER': 'smsuser',
+    #     'PASSWORD': 'usersms',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
+    #     'OPTIONS': {
+    #             'options': '-c search_path=schemass'
+    #         },
+    # }
+
+        ####    For Postgres Connectiopns   ####
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'db_sms_panel',
+        'USER': 'postgres',
+        'PASSWORD': 'root123',
+        'HOST': '192.168.0.47',
+        'PORT': '5432',
+        'OPTIONS': {
+            'options': '-c search_path=sms_schema'
+        },
+    }
+        ####    For Sqlite3 Connections     ####
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sms_panel',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '',
-        'PORT': '',
-        'OPTIONS': {
-        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    }
+
+        ####    For MYSQL Connections     ####
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'sms_panel',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '',
+    #     'PORT': '',
+    #     'OPTIONS': {
+    #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+    #     }
+    # }
 }
 
 
