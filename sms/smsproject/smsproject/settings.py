@@ -83,7 +83,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sms',
+        'NAME': 'custom_user',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '',
