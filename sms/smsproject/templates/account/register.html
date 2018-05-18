@@ -6,14 +6,17 @@
   Register
 {% endblock %}
 
-{% block heading %}
-  <h1>Register</h1>
-{% endblock %}
-
 {% block content %}
-  <form class="" action="{% url 'register' %}" method="post">
-    {% csrf_token %}
-    {{ form | crispy }}
-    <button type="submit" class="btn btn-success">Register</button>
-  </form>
+<div class="col-md-6 col-md-offset-3">
+    <h2 style="text-align:center">Signup</h2><br>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <div style="text-align:center">
+          <button type="submit" class="btn btn-primary">Signup</button>
+          <a href="" class="btn btn-warning">Cancel</a>
+          <br><br>
+        </div>
+    </form>
+</div>
 {% endblock %}
