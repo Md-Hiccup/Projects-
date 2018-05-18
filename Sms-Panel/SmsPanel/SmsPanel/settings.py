@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'authApp',
 ]
 
-# AUTH_USER_MODEL = 'authApp.signup'
+# AUTH_USER_MODEL = 'authApp.tbl_signup'      # For Abstract User
+# AUTH_USER_MODEL = 'authApp.employee'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -92,17 +93,17 @@ DATABASES = {
     # }
 
         ####    For Postgres Connectiopns   ####
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_sms_panel',
-        'USER': 'postgres',
-        'PASSWORD': 'root123',
-        'HOST': '192.168.0.47',
-        'PORT': '5432',
-        'OPTIONS': {
-            'options': '-c search_path=sms_schema'
-        },
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'db_sms_panel',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'root123',
+    #     'HOST': '192.168.0.47',
+    #     'PORT': '5432',
+    #     'OPTIONS': {
+    #         'options': '-c search_path=sms_schemas'
+    #     },
+    # }
         ####    For Sqlite3 Connections     ####
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
@@ -110,17 +111,17 @@ DATABASES = {
     # }
 
         ####    For MYSQL Connections     ####
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'sms_panel',
-    #     'USER': 'root',
-    #     'PASSWORD': 'root',
-    #     'HOST': '',
-    #     'PORT': '',
-    #     'OPTIONS': {
-    #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-    #     }
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sms',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+        'OPTIONS': {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
+    }
 }
 
 
