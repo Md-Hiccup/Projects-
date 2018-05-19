@@ -5,12 +5,13 @@
 {% block content %}
 <div class="jumbotron">
     <div class="container">
-        {% if user.is_authenticated %}
+      {% if user.is_authenticated %}
         <h2>Welcome {{ user.username }}!!</h2>
         <p>This is the home page</p>
-    {% else %}
+        <a href="{% url 'profile_edit' user.profiles.pk %}">Edit</a>
+      {% else %}
         <p>You are not logged in. Please Login!!</p>
-    {% endif %}
+      {% endif %}
     </div>
 </div>
 {% endblock %}
