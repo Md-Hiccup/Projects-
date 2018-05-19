@@ -1,47 +1,31 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-# Create your models here.
-class UserProfileModel(models.Model):
-    user = models.OneToOneField(User, on_delete = models.CASCADE)
-    gender = models.CharField(max_length=1, choices = ( ('M', 'Male'), ('F', 'Female')), blank = True)
-    age = models.PositiveIntegerField(blank = True, null = True)
-    department = models.CharField(max_length=100)
+class Profiles(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    emp_no = models.AutoField(primary_key=True)
+    emp_name = models.CharField(max_length = 100)
+    department = models.CharField(max_length=50, default='Others')
+    designation = models.CharField(max_length=50, default='Others')
+    email = models.EmailField(null=False, default="")
+    password = models.CharField(max_length=200, default="")
+    created_on = models.DateField(auto_now_add=True)
+    created_by = models.CharField(max_length=200, blank=True, default="")
+    created_time = models.TimeField(auto_now=True)
+    created_ip = models.GenericIPAddressField(null=True)
+    updated_on = models.DateField(auto_now=True, null=True)
+    updated_by = models.CharField(max_length=200, null=True)
+    updated_time = models.TimeField(auto_now=True, null=True)
+    updated_ip = models.GenericIPAddressField(null=True)
+    # login_permission = models.BooleanField(blank=True, null=False)
 
     def __str__(self):
-        return self.user.username
+        return self.email
 
-    class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
-
-    def get_absolute_url(self):
-        from django.urls import reverse
-        return redirect('signup')
-####### Trying to Inserting the Data to Postgres DB ##################
-# class tbl_signup(AbstractUser):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     emp_no = models.AutoField(primary_key=True)
-#     emp_name = models.CharField(max_length = 100)
-#     department = models.CharField(max_length=50, default='Others')
-#     designation = models.CharField(max_length=50, default='Others')
-#     login_permission = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return self.email
-
-
-####### For Manually Inserting the Data to Postgres DB ##################
-
-# class tbl_signup(models.Model):
-#
-#     emp_no = models.AutoField(primary_key=True)
-#     emp_name = models.CharField(max_length=255, verbose_name = 'Employee Name')
-#     email = models.EmailField()
-#     password = models.CharField(max_length=255)
-#
-#     # REQUIRED_FIELDS = ('emp_no', 'emp_name',)
-#     # USERNAME_FIELD = 'emp_name'
-#
-#     def __str__(self):
-#         return self.emp_name
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profiles.objects.create(user=instance)
+    instance.profiles.save()

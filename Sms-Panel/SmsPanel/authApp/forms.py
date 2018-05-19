@@ -1,42 +1,15 @@
-# from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-# # from .models import tbl_signup
-# # from .models import employee
+from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-# class CustomUserCreationForm(UserCreationForm):
-#
-#     class Meta(UserCreationForm.Meta):
-#         # model = tbl_signup
-#         # fields = ('emp_name', 'department', 'designation', 'login_permission', )
-#         model = employee
-#         fields = ['department']
-#
-# class CustomUserChangeForm(UserChangeForm):
-#
-#     class Meta:
-#         model = employee
-#         # model = tbl_signup
-#         fields = UserChangeForm.Meta.fields
-#
-# # class tbl_signup_form(forms.ModelForm):
-# #     password = forms.CharField(widget=forms.PasswordInput)
-# #     class Meta:
-# #         model = tbl_signup
-# #         fields = ['emp_no', 'emp_name', 'email', 'password' ]
+# from django.core.exceptions import ValidationError
 
-class RegisterUserForm(forms.ModelForm):
-    password = forms.CharField(widget = forms.PasswordInput)
-    password2 = forms.CharField(widget = forms.PasswordInput)
+class SignupForm(UserCreationForm):
+    emp_name = forms.CharField(help_text='Required correct employee name')
+    department = forms.CharField(help_text='Required correct department')
+    designation = forms.CharField(help_text='Required correct designation')
+    email = forms.EmailField(help_text='Required email address')
+    # login_permission = forms.BooleanField(help_text='True or False')
 
     class Meta:
         model = User
-        fields = ['username', 'email']
-
-    # validate password2
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password2'] != cd['password']:
-            raise ValidationError("Password don't match")
-
-        return cd['password2']
+        fields = ('username', 'emp_name', 'department', 'designation','email', 'password1', 'password2', )

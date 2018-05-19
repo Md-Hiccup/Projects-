@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 ]
 
 # AUTH_USER_MODEL = 'authApp.tbl_signup'      # For Abstract User
-# AUTH_USER_MODEL = 'authApp.employee'
+# AUTH_USER_MODEL = 'newapp1.Profile'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -93,35 +93,38 @@ DATABASES = {
     # }
 
         ####    For Postgres Connectiopns   ####
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'db_sms_panel',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'root123',
-    #     'HOST': '192.168.0.47',
-    #     'PORT': '5432',
-    #     'OPTIONS': {
-    #         'options': '-c search_path=sms_schemas'
-    #     },
-    # }
-        ####    For Sqlite3 Connections     ####
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'postgres',
+        'NAME': 'db_sms_panel',
+        'PASSWORD': 'root123',
+        'HOST': '192.168.0.47',
+        # 'NAME': 'postgres',           #   New Database Name
+        # 'PASSWORD': 'root#@!',        #   New Password
+        # 'HOST': '13.127.230.189',     #   New Host
+        'PORT': '5432',
+        'OPTIONS': {
+            'options': '-c search_path=schemas'     # new shcema = sms_schemas
+        },
+    }
+        ###    For Sqlite3 Connections     ####
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
 
         ####    For MYSQL Connections     ####
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sms',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '',
-        'PORT': '',
-        'OPTIONS': {
-        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'sms',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '',
+    #     'PORT': '',
+    #     'OPTIONS': {
+    #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+    #     }
+    # }
 }
 
 
