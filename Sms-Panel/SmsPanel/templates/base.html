@@ -41,8 +41,9 @@
               <ul class="nav navbar-nav navbar-right">
                   {% if user.is_authenticated %}
                     <li><a href="{% url 'profile_edit' user.profiles.pk %}">Edit</a></li>
+                    <li><a href="{% url 'change_password' %}">Change Password</a></li>
                     <li><a href="{% url 'password_reset' %}">Reset Password</a></li>
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a href="{% url 'logout' %}">Logout [&nbsp;{{ user.username }}&nbsp;]</a></li>
                   {% else %}
                     <li><a href="{% url 'signup' %}">Signup</a></li>
                     <li><a href="{% url 'login' %}">LogIn</a></li>

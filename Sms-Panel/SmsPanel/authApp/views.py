@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 from django.http import HttpResponse
 
 from .forms import SignupForm, EditProfileForm
@@ -12,6 +14,11 @@ import ipgetter, datetime       # ipgetter for Getting user IP, and datetime for
 @login_required
 def home(request):
     return render(request, 'home.html')
+
+####    To Getting Client IP     ####
+def get_client_ip(request):
+    ip = ipgetter.myip()
+    return ip
 
 
 ####    Signup form     ####
@@ -46,6 +53,7 @@ def signup(request):
 
 
 ####    Profile Edit form     ####
+@login_required
 def edit_profile(request, pk):
     print('edit profile pk', pk)
     profile = get_object_or_404(Profiles, pk=pk)
@@ -76,7 +84,26 @@ def edit_profile(request, pk):
     return render(request, 'edit_user.html', {'form': form})
 
 
-####    To Getting Client IP     ####
-def get_client_ip(request):
-    ip = ipgetter.myip()
-    return ip
+####    To Change Password      ####
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            update_session_auth_hash(request, user)  # Important!
+            user.profiles.password = form.cleaned_data['new_password1']
+            user.profiles.updated_on = datetime.date.today()
+            user.profiles.updated_by = request.user.username
+            user.profiles.updated_time = datetime.time()
+            user.profiles.updated_ip = get_client_ip(request)
+            user.save();
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/password_change.html', {
+        'form': form
+    })
