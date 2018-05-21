@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.hashers import make_password
 
 from .forms import SignupForm, EditProfileForm
 from .models import Profiles
@@ -15,7 +15,7 @@ import ipgetter, datetime       # ipgetter for Getting user IP, and datetime for
 def home(request):
     return render(request, 'home.html')
 
-####    To Getting Client IP     ####
+####    Getting Client IP     ####
 def get_client_ip(request):
     ip = ipgetter.myip()
     return ip
@@ -33,7 +33,8 @@ def signup(request):
             user.profiles.department=form.cleaned_data['department']
             user.profiles.designation=form.cleaned_data['designation']
             user.profiles.email = form.cleaned_data['email']
-            user.profiles.password = form.cleaned_data['password1']
+            pwd = form.cleaned_data['password1']
+            user.profiles.password = make_password(pwd)
             user.profiles.created_on = datetime.date.today()
             user.profiles.created_by = form.cleaned_data['emp_name']
             user.profiles.created_time = datetime.time()
@@ -55,36 +56,32 @@ def signup(request):
 ####    Profile Edit form     ####
 @login_required
 def edit_profile(request, pk):
-    print('edit profile pk', pk)
     profile = get_object_or_404(Profiles, pk=pk)
+    print('profile...',profile)
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=profile)
+        form = EditProfileForm(request.POST, instance=request.user.profiles)
         if form.is_valid():
-            print('inside post method')
+            print('inside post method', form.clean())
             user = form.save(commit=False)
             user.refresh_from_db()  # load the profile instance created by the signal
-            user.profiles.emp_name=form.cleaned_data['emp_name']
-            user.profiles.department=form.cleaned_data['department']
-            user.profiles.designation=form.cleaned_data['designation']
-            user.profiles.email = form.cleaned_data['email']
-            # user.profiles.password = form.cleaned_data['password1']
-            user.profiles.updated_on = datetime.date.today()
-            user.profiles.updated_by = form.cleaned_data['emp_name']
-            user.profiles.updated_time = datetime.time()
-            user.profiles.updated_ip = get_client_ip(request)
+            user.emp_name=form.cleaned_data['emp_name']
+            user.department=form.cleaned_data['department']
+            user.designation=form.cleaned_data['designation']
+            user.email = form.cleaned_data['email']
+            user.updated_on = datetime.date.today()
+            user.updated_by = form.cleaned_data['emp_name']
+            user.updated_time = datetime.time()
+            user.updated_ip = get_client_ip(request)
             user.save()
-            # raw_password = form.cleaned_data.get('password1')
-            # user = authenticate(username=user.username, password=raw_password)
-            # login(request, user)
-            # return redirect('home')
-            return JsonResponse({ 'message': 'Successfully edit'})
+            return redirect('home')
+            # return JsonResponse({ 'message': 'Successfully edit'})
     else:
         print('else condition edit profile')
         form = EditProfileForm(instance = request.user.profiles)
     return render(request, 'edit_user.html', {'form': form})
 
 
-####    To Change Password      ####
+####    Change Password      ####
 @login_required
 def change_password(request):
     if request.method == 'POST':

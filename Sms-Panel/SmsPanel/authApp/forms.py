@@ -15,14 +15,13 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('username', 'emp_name', 'department', 'designation','email', )
 
-class EditProfileForm(UserChangeForm):
+class EditProfileForm(forms.ModelForm):
     emp_name = forms.CharField(help_text='Required correct employee name')
     department = forms.CharField(help_text='Required correct department')
     designation = forms.CharField(help_text='Required correct designation')
     email = forms.EmailField(help_text='Required email address')
 
     class Meta:
-        model = Profiles
+        model = User
         # fields = UserChangeForm.Meta.fields
         fields = ['emp_name', 'department', 'designation','email', ]
-        exclude = ['username','password1', 'password2', ]
