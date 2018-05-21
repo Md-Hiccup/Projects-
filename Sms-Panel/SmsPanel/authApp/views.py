@@ -1,20 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
+from django.http import HttpResponse
 
 from .forms import SignupForm, EditProfileForm
 from .models import Profiles
 
-import ipgetter, datetime
-####    Home Page     ####
+import ipgetter, datetime       # ipgetter for Getting user IP, and datetime for getting current date and time
 
+####    Home Page     ####
 @login_required
 def home(request):
     return render(request, 'home.html')
 
 
 ####    Signup form     ####
-
 def signup(request):
     print('signup form')
     if request.method == 'POST':
@@ -46,7 +46,6 @@ def signup(request):
 
 
 ####    Profile Edit form     ####
-
 def edit_profile(request, pk):
     print('edit profile pk', pk)
     profile = get_object_or_404(Profiles, pk=pk)
@@ -78,7 +77,6 @@ def edit_profile(request, pk):
 
 
 ####    To Getting Client IP     ####
-
 def get_client_ip(request):
     ip = ipgetter.myip()
     return ip

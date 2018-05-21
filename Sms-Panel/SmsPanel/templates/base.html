@@ -40,6 +40,8 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-right">
                   {% if user.is_authenticated %}
+                    <li><a href="{% url 'profile_edit' user.profiles.pk %}">Edit</a></li>
+                    <li><a href="{% url 'password_reset' %}">Reset Password</a></li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                   {% else %}
                     <li><a href="{% url 'signup' %}">Signup</a></li>
